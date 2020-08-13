@@ -14,7 +14,7 @@
 #'@param r23 correlation Time 2 and Time 3
 #'@param r24 correlation Time 2 and Time 4
 #'@param r34 correlation Time 3 and Time 4
-#'@param n Sample size for first group
+#'@param n Total sample size
 #'@param alpha Type I error (default is .05)
 #'@examples
 #'win1F(m1=-.25,m2=.00,m3=.10,m4=.15,s1=.4,s2=.5,s3=.6,s4=.7,

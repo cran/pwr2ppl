@@ -1,5 +1,6 @@
 #'Compute power for Tests of Two Independent Proportions
 #'Takes phi, degrees of freedom, and a range of sample sizes. Alpha is .05 by default, alternative values may be entered by user
+#'This test uses what is sometimes called the chi-square test for comparing proportions
 #'@param p1 expected proportion Group 1
 #'@param p2 expected proportion Group 2
 #'@param nlow starting sample size

@@ -30,7 +30,7 @@
 #'@param r3.4_2 correlation Within Factor Level 1 and Within Factor, Level 4, 2nd level Between
 #'@param r sets same correlations between DVs on all factor levels (seriously, just use this)
 #'@param s sets same standard deviation for factor levels (see comment above)
-#'@param n Sample size for first group
+#'@param n for each between group level
 #'@param alpha Type I error (default is .05)
 #'@examples
 #'win1bg1(m1.1 = -.25, m2.1=0, m3.1=0.10, m4.1=.15,
