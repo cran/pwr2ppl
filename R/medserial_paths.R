@@ -1,27 +1,36 @@
 #'Compute Power for Serial Mediation Effects
 #'Requires correlations between all variables as sample size.
 #'This approach calculates power for the serial mediation using
-#'joint significance (recommended)
-#'@param rxy Correlation between DV (y) and predictor (x)
-#'@param rxm1 Correlation between predictor (x) and first mediator (m1)
-#'@param rxm2 Correlation between predictor (x) and second mediator (m2)
-#'@param rym1 Correlation between DV (y) and first mediator (m1)
-#'@param rym2 Correlation between DV (y) and second mediator (m2)
-#'@param rm1m2 Correlation first mediator (m1) and second mediator (m2)
+#'joint significance (recommended) and path coefficients
+#'@param a1 path between predictor and first mediator
+#'@param a2 path between predictor and first mediator
+#'@param b1 Path between first mediator and dependent variable
+#'@param b2 Path between first mediator and dependent variable
+#'@param cprime Path between predictor and dependent variable
+#'@param d Path first mediator (m1) and second mediator (m2)
+#'@param n Sample size
 #'@param alpha Type I error (default is .05)
-#'@param rep number of repetitions (1000 is default)
-#'@param n sample size
+#'@param reps number of repetitions (1000 is default)
 #'@examples
-#'\donttest{medserial(rxm1=.3, rxm2=.3, rxy=-.35,
-#'rym1=-.5,rym2=-.5, rm1m2=.7,n=150)}
+#'\donttest{medserial_paths(a1=.3, a2=.3, b1=.35,
+#'b2=.3,d=.2,cprime=.1,n=150)}
 #'@return Power for Serial Mediated (Indirect) Effects
 #'@export
 #'
 #'
 
-medserial<-function(rxm1,rxm2,rxy,rm1m2,rym1,rym2,n,alpha=.05, rep=1000)
+medserial_paths<-function(a1,a2,b1,b2,d,cprime,n,alpha=.05, reps=1000)
 {
   V1<-NA;V2<-NA;V3<-NA;V4<-NA
+  rxm1 <- a1 #x to M1
+  rxm2 <- a2 + d*a1 #x to m2
+  rm1m2 <- d + a1*a2 #m1 -> m2
+  rxy <- cprime + a1*b1 + rxm2 #x to y
+  rym1 <- a1*cprime + b1 + b2*rxm2 #m1 to y
+  rym2 <- a2*rxm2 + b2 + b1*rm1m2 #m2 to y
+
+
+
   pop <- MASS::mvrnorm(100000, mu = c(0,0,0,0),
                        Sigma = matrix(c(1.0,rxm1,rxm2, rxy,
                                         rxm1,1.0,rm1m2, rym1,
@@ -31,7 +40,7 @@ medserial<-function(rxm1,rxm2,rxy,rm1m2,rym1,rym2,n,alpha=.05, rep=1000)
   pop<-as.data.frame(pop)
   pop<-dplyr::rename(pop, x = V1, m1 = V2, m2 = V3, y = V4)
   set.seed(1234)
-  nruns = rep
+  nruns = reps
   a = numeric(nruns)
   b = numeric(nruns)
   pa1<-NA
