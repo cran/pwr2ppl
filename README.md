@@ -32,5 +32,4 @@ This project is licensed under the MIT License.
 
 [![](https://cranlogs.r-pkg.org/badges/pwr2ppl)](https://cran.r-project.org/package=pwr2ppl)
 
-[![Build
-Status](https://travis-ci.com/chrisaberson/pwr2ppl.svg?branch=master)](https://travis-ci.com/chrisaberson/pwr2ppl)
+
