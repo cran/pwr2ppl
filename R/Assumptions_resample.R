@@ -29,11 +29,16 @@
 #'@param k4 Kurtosis of fourth predictor
 #'@param k5 Kurtosis of fifth predictor
 #'@param test type of test ("boot","jack","perm")
-#'@param reps number of replications, default is 200 - use larger for final analyses
-#'@param boots number of bootstrap samples. Default is 500. Use larger for final.
+#'@param boots number of runs, default is 500
+#'@param reps number of runs, default is 200
+#'
 #'@examples
-#'\donttest{Assumptions_resample(ry1=.0,ry2=.3,r12=.3,sy=1,s1=2,s2=2,ky=1,k1=1,k2=1,n=100)}
-#'@return Power for Multiple Regression with Non Normal Variables via resample
+#'\donttest{Assumptions_resample(ry1=.0, ry2=.3, ry3=.3, ry4=.1, r12 = .0,
+#'r13=.0, r14=.0, r23=.0, r24=.0,r34=0,
+#'sy=1,s1=2,s2=2, s3=1,s4=1, ky=1,k1=1,k2=1,
+#'k3=1,k4=1, n=100, test="boot")}
+#'
+#'@return Power for Multiple Regression with Non Normal Variables
 #'@export
 #'
 #'
@@ -44,7 +49,7 @@ Assumptions_resample<-function(ry1=NULL, ry2=NULL, ry3=NULL, ry4=NULL, ry5=NULL,
                   r34=NULL, r35=NULL,
                   r45=NULL, sy=NULL, s1=NULL, s2=NULL, s3=NULL, s4=NULL,s5=NULL,
                   ky=NULL,k1=NULL,k2=NULL,k3=NULL,k4=NULL,k5=NULL,
-                  n=NULL, alpha=.05, test="boot", reps=200, boots=500)
+                  n=NULL, alpha=.05, test=NULL, reps=200, boots=500)
   {
 
 
@@ -252,7 +257,7 @@ if (pred==2 && test=="perm")
                                 kurtosis=c(ky,k1,k2))
 
   samp = data.frame(samp)
-  testx<-(summary(lmPerm::lmp(X1~ X2+ X3, data = samp)))
+  invisible(utils::capture.output(testx<-(summary(lmPerm::lmp(X1~ X2+ X3, data = samp)))))
   b1[i] = testx$coefficients[2,3] #grabs p from each analysis
   b2[i] = testx$coefficients[3,3]}
   message("Adjustment: ", test)
@@ -280,7 +285,8 @@ if (pred==3 && test=="perm")
                                 kurtosis=c(ky,k1,k2,k3))
   samp = data.frame(samp)
 
-  testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4, data = samp))
+  invisible(utils::capture.output(testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4, data = samp))))
+
   b1[i] = testx$coefficients[2,3] #grabs p from each analysis
   b2[i] = testx$coefficients[3,3]
   b3[i] = testx$coefficients[4,3]}
@@ -317,7 +323,7 @@ if (pred==4 && test=="perm")
                                  kurtosis=c(ky,k1,k2,k3,k4))
     samp = data.frame(samp)
 
-    testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4+X5, data = samp))
+    invisible(utils::capture.output(testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4+X5, data = samp))))
 
     b1[i] = testx$coefficients[2,3] #grabs p from each analysis
     b2[i] = testx$coefficients[3,3]
@@ -360,7 +366,7 @@ if (pred==5 && test=="perm")
                                  skewness=c(sy,s1,s2,s3,s4,s5) ,
                                  kurtosis=c(ky,k1,k2,k3,k4,k5))
     samp = data.frame(samp)
-    testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4+X5+X6, data = samp))
+    invisible(utils::capture.output(testx<-summary(lmPerm::lmp(X1~ X2+ X3+X4+X5+X6, data = samp))))
 
     b1[i] = testx$coefficients[2,3] #grabs p from each analysis
     b2[i] = testx$coefficients[3,3]

@@ -1,7 +1,7 @@
 #'Compute Precision Analyses for Standardized Mean Differences
 #'@param d Standardized means difference between groups
-#'@param nlow starting total sample size
-#'@param nhigh ending total sample size
+#'@param nlow starting sample size
+#'@param nhigh ending sample size
 #'@param by Incremental increase in sample (e.g. nlow = 10, nhigh = 24, by = 2, produces estimates of 10, 12, and 14)
 #'@param propn1 Proportion in First Group
 #'@param ci Type of Confidence Interval (e.g., .95)

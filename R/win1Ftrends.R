@@ -32,9 +32,7 @@ win1Ftrends<-function(m1,m2,m3=NA,m4=NA, s1, s2, s3=NULL,s4=NULL,
   levels[is.na(m4) & is.na(m3)]<-2
   levels[is.na(m4) & !is.na(m3)]<-3
   levels[!is.na(m4)]<-4
-  oldoption<-options(contrasts=c("contr.helmert", "contr.poly"))
-  oldoption
-  on.exit(options(oldoption))
+  options(contrasts=c("contr.helmert", "contr.poly"))
   if(levels<3|levels>4){stop("Function requires 3 to 4 levels")}
   if(levels==3){
     var1<-s1^2

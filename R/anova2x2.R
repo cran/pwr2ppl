@@ -22,7 +22,7 @@
 #'s1.1=1.7, s1.2=1.7, s2.1=1.7, s2.2=1.7,
 #'n1.1=100, n1.2=100, n2.1=100, n2.2=100,
 #'alpha=.05, all="ON")
-#'@return Power for the Two Factor ANOVA
+#'@return Power for the One Factor ANOVA
 #'@export
 
 anova2x2<-function(m1.1=NULL,m1.2=NULL,m2.1=NULL,m2.2=NULL, s1.1=NULL,s1.2=NULL,s2.1=NULL,s2.2=NULL,

@@ -14,7 +14,7 @@
 #'@param r23 correlation Time 2 and Time 3
 #'@param r24 correlation Time 2 and Time 4
 #'@param r34 correlation Time 3 and Time 4
-#'@param n Total sample size
+#'@param n Sample size for first group
 #'@param alpha Type I error (default is .05)
 #'@examples
 #'win1F(m1=-.25,m2=.00,m3=.10,m4=.15,s1=.4,s2=.5,s3=.6,s4=.7,
@@ -33,9 +33,6 @@ win1F<-function(m1,m2,m3=NA,m4=NA, s1, s2, s3=NULL,s4=NULL,
   levels[is.na(m4) & is.na(m3)]<-2
   levels[is.na(m4) & !is.na(m3)]<-3
   levels[!is.na(m4)]<-4
-  oldoption<-options(contrasts=c("contr.helmert", "contr.poly"))
-  oldoption
-  on.exit(options(oldoption))
 
   if(levels<2|levels>4){stop("Function requires 2 to 4 levels")}
   if(levels=="2"){
@@ -52,19 +49,21 @@ win1F<-function(m1,m2,m3=NA,m4=NA, s1, s2, s3=NULL,s4=NULL,
     out$id<-as.factor(out$id)
     out<-tidyr::gather(out,key="iv",value="dv",-id)
     out$iv<-as.ordered(out$iv)
-    model<-ez::ezANOVA(data=out, dv=dv, wid=id, within = iv, type=3, detailed=TRUE)
-    df1<-model$ANOVA$DFn[2]
-    df2<-model$ANOVA$DFd[2]
-    SSB<-model$ANOVA$SSn[2]
-    SSW<-model$ANOVA$SSd[2]
+    options(contrasts=c("contr.helmert", "contr.poly"))
+    model<-afex::aov_ez("id", "dv" , out, within = c("iv"), type=3, detailed=TRUE)
+    xx<-summary(model)
+    df1<-xx$univariate.tests[2,2]
+    df2<-xx$univariate.tests[2,4]
+    SSB<-xx$univariate.tests[2,1]
+    SSW<-xx$univariate.tests[2,3]
     eta2<-SSB/(SSB+SSW)
     f2<-eta2/(1-eta2)
     lambda<-f2*df2
     minusalpha<-1-alpha
-    Ft<-stats::qf(minusalpha, df1, df2)
-    power<-round(1-stats::pf(Ft, df1,df2,lambda),3)
-    gge<-model$`Sphericity Corrections`$GGe
-    hfe<-model$`Sphericity Corrections`$HFe
+    Ft<-qf(minusalpha, df1, df2)
+    power<-round(1-pf(Ft, df1,df2,lambda),3)
+    gge<-1
+    hfe<-1
     ggdf1<-gge*df1
     ggdf2<-gge*df2
     hfdf1<-hfe*df1
@@ -105,19 +104,21 @@ win1F<-function(m1,m2,m3=NA,m4=NA, s1, s2, s3=NULL,s4=NULL,
     out$id<-as.factor(out$id)
     out<-tidyr::gather(out,key="iv",value="dv",-id)
     out$iv<-as.ordered(out$iv)
-    model<-ez::ezANOVA(data=out, dv=dv, wid=id, within = iv, type=3, detailed=TRUE)
-    df1<-model$ANOVA$DFn[2]
-    df2<-model$ANOVA$DFd[2]
-    SSB<-model$ANOVA$SSn[2]
-    SSW<-model$ANOVA$SSd[2]
+    options(contrasts=c("contr.helmert", "contr.poly"))
+    model<-afex::aov_ez("id", "dv" , out, within = c("iv"), type=3, detailed=TRUE)
+    xx<-summary(model)
+    df1<-xx$univariate.tests[2,2]
+    df2<-xx$univariate.tests[2,4]
+    SSB<-xx$univariate.tests[2,1]
+    SSW<-xx$univariate.tests[2,3]
     eta2<-SSB/(SSB+SSW)
     f2<-eta2/(1-eta2)
     lambda<-f2*df2
     minusalpha<-1-alpha
-    Ft<-stats::qf(minusalpha, df1, df2)
-    power<-round(1-stats::pf(Ft, df1,df2,lambda),3)
-    gge<-round(model$`Sphericity Corrections`$GGe,3)
-    hfe<-round(model$`Sphericity Corrections`$HFe,3)
+    Ft<-qf(minusalpha, df1, df2)
+    power<-round(1-pf(Ft, df1,df2,lambda),3)
+    gge<-round(xx$pval.adjustments[1],3)
+    hfe<-round(xx$pval.adjustments[3],3)
     ggdf1<-gge*df1
     ggdf2<-gge*df2
     hfdf1<-hfe*df1
@@ -168,19 +169,21 @@ win1F<-function(m1,m2,m3=NA,m4=NA, s1, s2, s3=NULL,s4=NULL,
     out$id<-as.factor(out$id)
     out<-tidyr::gather(out,key="iv",value="dv",-id)
     out$iv<-as.ordered(out$iv)
-    model<-ez::ezANOVA(data=out, dv=dv, wid=id, within = iv, type=3, detailed=TRUE)
-    df1<-model$ANOVA$DFn[2]
-    df2<-model$ANOVA$DFd[2]
-    SSB<-model$ANOVA$SSn[2]
-    SSW<-model$ANOVA$SSd[2]
+    options(contrasts=c("contr.helmert", "contr.poly"))
+    model<-afex::aov_ez("id", "dv" , out, within = c("iv"), type=3, detailed=TRUE)
+    xx<-summary(model)
+    df1<-xx$univariate.tests[2,2]
+    df2<-xx$univariate.tests[2,4]
+    SSB<-xx$univariate.tests[2,1]
+    SSW<-xx$univariate.tests[2,3]
     eta2<-SSB/(SSB+SSW)
     f2<-eta2/(1-eta2)
     lambda<-f2*df2
     minusalpha<-1-alpha
-    Ft<-stats::qf(minusalpha, df1, df2)
-    power<-round(1-stats::pf(Ft, df1,df2,lambda),3)
-    gge<-round(model$`Sphericity Corrections`$GGe,3)
-    hfe<-round(model$`Sphericity Corrections`$HFe,3)
+    Ft<-qf(minusalpha, df1, df2)
+    power<-round(1-pf(Ft, df1,df2,lambda),3)
+    gge<-round(xx$pval.adjustments[1],3)
+    hfe<-round(xx$pval.adjustments[3],3)
     ggdf1<-gge*df1
     ggdf2<-gge*df2
     hfdf1<-hfe*df1

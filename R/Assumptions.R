@@ -87,8 +87,8 @@ rejectb5<-NA
 
 #For boots
 
-reps = 200
-runs = reps*nruns
+nruns = 200
+runs = nruns*nruns
 bb1 = numeric(runs)
 bb2 = numeric(runs)
 bb3 = numeric(runs)
